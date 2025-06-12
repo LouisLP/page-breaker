@@ -1,39 +1,36 @@
-# page-breaker
+# AVAYL Page Break
 
-This template should help get you started developing with Vue 3 in Vite.
+These are some notes about the AVAYL coding challenge. Start by checking out the [HTML here](https://app.avayl.tech/coding_task.html).
 
-## Recommended IDE Setup
+## Description
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Without using a library (and just a regular Typescript/Vue project), implement a **page-break algorithm**. This means: shift the content of a document to the “next page” based off an inputted page height (in pixels).
 
-## Type Support for `.vue` Imports in TS
+## Considerations
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- The cut-off point could be on any element, but the more complex ones are:
+  - Within an **image**
+  - Within a **table**
+  - Within a **list**
+- Check each cut-off point to see if subsequent pages get created (so after a 1000px break into a 2nd page, it would also check the element at 2000px to see if that needs to be broken into a 3rd page).
 
-## Customize configuration
+## Observations
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+I went on Google Docs and played around with moving certain things over to the next page...
 
-## Project Setup
+- List items _cut_ to the next page.
+- Table cells _cut_ to the next page.
+- Images _don’t cut_ to the next page (they need to fit entirely within the page it’s on).
 
-```sh
-npm install
-```
+## Ideas
 
-### Compile and Hot-Reload for Development
+This reminds me of a game design problem involving [hitboxes](https://en.wikipedia.org/wiki/Collision_detection#Hitbox). If, for example, you’re checking if a character gets hit by a fireball, they have a box drawn around them to denote what’s “hittable” on their body. If the fireball’s hitbox intersects with the character’s hitbox, it’s a hit. Otherwise, it’s a miss.
 
-```sh
-npm run dev
-```
+This page-break algorithm is essentially checking the same thing: does the **page-break pixel height** (the fireball) hit the **text’s position** (the character)? If yes, check what got hit, and appropriately split the content onto a newly-created page. The "hit" is an imaginary horizontal line that runs across the page at a certain pixel height.
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- Something like a `<p>` tag would just need to be split onto the next line.
+- A `<ul>` tag would need to be split at the next `<li>` tag.
+- A `<table>` tag would need to be split at the next `<tr>` tag.
+- An `<img>` tag would need to be moved entirely onto the next page.
+- A `<div>` or `<span>` tag would need to be split at the next child element.
+- A `<br>` tag would need to be split at the next line break.
