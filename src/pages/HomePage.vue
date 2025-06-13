@@ -10,7 +10,7 @@ import RichTextEditor from '../components/RichTextEditor.vue'
       <div class="flex items-center gap-2 font-bold tracking-wide text-xl">
         <span>Page Breaker</span>
         <img
-          src="/public/favicon_io/apple-touch-icon.png"
+          src="/favicon_io/apple-touch-icon.png"
           alt="Broken heart logo"
           class="size-4 animate-pulse mt-1"
         />
