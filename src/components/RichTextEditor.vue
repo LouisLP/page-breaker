@@ -134,7 +134,7 @@ const setPageBreak = (): void => {
     <!-- Toolbar (buttons) -->
     <div
       id="toolbar"
-      class="bg-gray-100 p-2.5 border border-gray-300 border-b-0 flex items-center flex-wrap gap-1"
+      class="bg-gray-100 p-2.5 border border-gray-300 flex items-center flex-wrap gap-1"
     >
       <!-- Format Bold -->
       <button
@@ -219,7 +219,7 @@ const setPageBreak = (): void => {
       </span>
     </div>
 
-    <!-- Editor or Pages View -->
+    <!-- Editor -->
     <div v-if="pages.length === 0">
       <!-- Default editor value -->
       <div
@@ -232,12 +232,12 @@ const setPageBreak = (): void => {
       />
     </div>
 
+    <!-- Pages View -->
     <div v-else>
-      <!-- Pages View -->
-      <div class="mb-4 flex items-center gap-2">
-        <span class="text-sm text-gray-600"
-          >{{ pages.length }} page{{ pages.length !== 1 ? 's' : '' }} created</span
-        >
+      <div class="m-4 flex items-center gap-2">
+        <span class="text-sm text-gray-600">
+          {{ pages.length }} page{{ pages.length !== 1 ? 's' : '' }} created
+        </span>
         <button
           @click="pages = []"
           class="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600"
@@ -250,10 +250,10 @@ const setPageBreak = (): void => {
         v-for="(page, index) in pages"
         :key="index"
         class="page border border-gray-300 p-5 mb-4 bg-white shadow-sm"
-        :style="{ height: pageHeight + 'px', overflow: 'hidden' }"
+        :style="{ height: pageHeight + 50 + 'px', overflow: 'hidden' }"
       >
         <div class="text-xs text-gray-500 mb-2">Page {{ index + 1 }}</div>
-        <div v-html="page" class="page-content"></div>
+        <div v-html="page" class="page-content mb-24"></div>
       </div>
     </div>
   </div>
