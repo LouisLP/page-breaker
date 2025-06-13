@@ -8,8 +8,6 @@ const editorRef = ref<HTMLElement | null>(null)
 const pages = ref<string[]>([])
 const editorContent = ref<string>(`
 <div><img src="https://placehold.co/700x300" alt="Placeholder image 1" /></div>
-<br />
-<div><br /></div>
 <div><br /></div>
 <div><b>This is the heading</b></div>
 <div>
@@ -250,7 +248,7 @@ const setPageBreak = (): void => {
         v-for="(page, index) in pages"
         :key="index"
         class="page border border-gray-300 p-5 mb-4 bg-white shadow-sm"
-        :style="{ height: pageHeight + 50 + 'px', overflow: 'hidden' }"
+        :style="{ height: pageHeight + 80 + 'px', overflow: 'hidden' }"
       >
         <div class="text-xs text-gray-500 mb-2">Page {{ index + 1 }}</div>
         <div v-html="page" class="page-content mb-24"></div>
