@@ -123,6 +123,8 @@ const setPageBreak = (): void => {
   const resultPages = pageBreakService.processElements(elements, pageHeight.value)
   pages.value = resultPages
 
+  console.log('Pages created:', resultPages)
+
   console.log(`Created ${resultPages.length} pages`)
 }
 </script>
