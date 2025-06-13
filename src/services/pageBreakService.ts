@@ -19,17 +19,16 @@ export class PageBreakService {
     const beforeRows: Element[] = []
     let afterRows: Element[] = []
 
-    // Test adding rows one by one to see where the split should occur
     for (let i = 0; i < rows.length; i++) {
       const testRows = [...beforeRows, rows[i]]
-      const testTable = DOMUtils.createTableWithRows(table, testRows)
+      const testTable = DOMUtils.cloneTableStructure(table)
+      DOMUtils.addRowsToTable(testTable, testRows)
 
       const testHeight = DOMUtils.measureElementsHeight([testTable], this.referenceElement)
 
       if (testHeight <= availableHeight) {
         beforeRows.push(rows[i])
       } else {
-        // This row causes overflow, so it and all subsequent rows go to next page
         afterRows = rows.slice(i)
         break
       }
@@ -39,11 +38,13 @@ export class PageBreakService {
     let afterTable: Element | null = null
 
     if (beforeRows.length > 0) {
-      beforeTable = DOMUtils.createTableWithRows(table, beforeRows)
+      beforeTable = DOMUtils.cloneTableStructure(table)
+      DOMUtils.addRowsToTable(beforeTable, beforeRows)
     }
 
     if (afterRows.length > 0) {
-      afterTable = DOMUtils.createTableWithRows(table, afterRows)
+      afterTable = DOMUtils.cloneTableStructure(table)
+      DOMUtils.addRowsToTable(afterTable, afterRows)
     }
 
     return { before: beforeTable, after: afterTable }

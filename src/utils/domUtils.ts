@@ -40,60 +40,22 @@ export class DOMUtils {
   }
 
   /**
-   * Clone a table structure properly preserving all attributes and nested structure
+   * Clone a table structure without content
    */
   static cloneTableStructure(table: Element): Element {
-    // Clone the table element with all its attributes
-    const clonedTable = document.createElement('table')
-
-    // Copy all attributes from original table
-    for (let i = 0; i < table.attributes.length; i++) {
-      const attr = table.attributes[i]
-      clonedTable.setAttribute(attr.name, attr.value)
-    }
-
-    // Find and clone the tbody structure
-    const originalTbody = table.querySelector('tbody')
-    if (originalTbody) {
-      const clonedTbody = document.createElement('tbody')
-      // Copy tbody attributes if any
-      for (let i = 0; i < originalTbody.attributes.length; i++) {
-        const attr = originalTbody.attributes[i]
-        clonedTbody.setAttribute(attr.name, attr.value)
-      }
-      clonedTable.appendChild(clonedTbody)
-    } else {
-      // Create tbody if it doesn't exist
-      const tbody = document.createElement('tbody')
+    const clonedTable = table.cloneNode(false) as Element
+    const tbody = clonedTable.querySelector('tbody') || document.createElement('tbody')
+    if (!clonedTable.querySelector('tbody')) {
       clonedTable.appendChild(tbody)
     }
-
     return clonedTable
   }
 
   /**
-   * Add rows to a table's tbody properly
+   * Add rows to a table's tbody
    */
   static addRowsToTable(table: Element, rows: Element[]): void {
-    const tbody = table.querySelector('tbody')
-    if (!tbody) {
-      console.error('No tbody found in table')
-      return
-    }
-
-    rows.forEach((row) => {
-      // Clone the entire row with all its content and attributes
-      const clonedRow = row.cloneNode(true) as Element
-      tbody.appendChild(clonedRow)
-    })
-  }
-
-  /**
-   * Create a complete table with specific rows (safer method)
-   */
-  static createTableWithRows(originalTable: Element, rows: Element[]): Element {
-    const newTable = this.cloneTableStructure(originalTable)
-    this.addRowsToTable(newTable, rows)
-    return newTable
+    const tbody = table.querySelector('tbody')!
+    rows.forEach((row) => tbody.appendChild(row.cloneNode(true)))
   }
 }
