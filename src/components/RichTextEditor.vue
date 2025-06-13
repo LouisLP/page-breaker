@@ -522,7 +522,7 @@ const setPageBreak = (): void => {
       <div
         ref="editorRef"
         id="editor"
-        class="editor border border-gray-300 min-h-72 p-5 mt-0 outline-none leading-6 focus:border-green-500 focus:shadow-[0_0_5px_rgba(76,175,80,0.3)]"
+        class="editor border border-gray-300 min-h-72 p-5 mt-0 outline-none leading-6 focus:border-blue-500 focus:shadow-sm"
         contenteditable="true"
         @focus="handleEditorFocus"
         v-html="editorContent"
