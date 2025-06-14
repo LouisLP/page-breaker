@@ -38,7 +38,6 @@ const editorContent = ref<string>(`
   </p>
 
   <br />
-  <br />
 
   <table border="1" style="width: 100%; margin: 10px 0">
     <tbody>
@@ -70,13 +69,18 @@ const editorContent = ref<string>(`
     sit amet.
   </p>
 
-  <br />
+  <ol>
+    <li>Ordered list item 1</li>
+    <li>Ordered list item 2</li>
+    <li>Ordered list item 3</li>
+    <li>Ordered list item 4</li>
+  </ol>
 
   <ul>
-    <li>List item</li>
-    <li>Another</li>
-    <li>Item</li>
-    <li>Item</li>
+    <li>Unordered list item 1</li>
+    <li>Unordered list item 2</li>
+    <li>Unordered list item 3</li>
+    <li>Unordered list item 4</li>
   </ul>
 
   <p>
@@ -96,7 +100,6 @@ const editorContent = ref<string>(`
   </p>
 
   <img src="https://placehold.co/700x600" alt="Placeholder image 2" />
-
 `)
 
 // Editor actions
