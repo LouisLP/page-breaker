@@ -54,9 +54,25 @@ export class PageBreakService {
     const afterItems: Element[] = []
 
     for (const item of items) {
-      const position = DOMUtils.getElementPosition(item, this.referenceElement)
+      // Get the position relative to the viewport
+      const itemRect = item.getBoundingClientRect()
+      // Convert to position relative to the editor
+      const editorRect = this.referenceElement.getBoundingClientRect()
+      const relativeTop = itemRect.top - editorRect.top
+      const relativeBottom = itemRect.bottom - editorRect.top
 
-      if (position.bottom <= breakPosition) {
+      console.log(
+        'List item:',
+        item.textContent?.trim(),
+        'position:',
+        relativeTop,
+        'to',
+        relativeBottom,
+        'break at:',
+        breakPosition,
+      )
+
+      if (relativeBottom <= breakPosition) {
         // Item fits completely before the break
         beforeItems.push(item)
       } else {
@@ -64,6 +80,10 @@ export class PageBreakService {
         afterItems.push(item)
       }
     }
+
+    console.log(
+      `List split: ${beforeItems.length} items before, ${afterItems.length} items after break`,
+    )
 
     let beforeList: Element | null = null
     let afterList: Element | null = null
@@ -112,18 +132,39 @@ export class PageBreakService {
 
     while (remainingElements.length > 0) {
       const currentElement = remainingElements[0]
-      const position = DOMUtils.getElementPosition(currentElement, this.referenceElement)
+      const elementRect = currentElement.getBoundingClientRect()
+      const editorRect = this.referenceElement.getBoundingClientRect()
+      const elementHeight = elementRect.height
+
+      // FIXME: debugging logs
+      console.debug(
+        'Processing element:',
+        currentElement.tagName,
+        'Height:',
+        elementHeight,
+        'Current page height:',
+        currentPageHeight,
+        'Page limit:',
+        pageHeight,
+      )
 
       // Check if element fits on current page
-      if (currentPageHeight === 0 || currentPageHeight + position.height <= pageHeight) {
+      if (currentPageHeight === 0 || currentPageHeight + elementHeight <= pageHeight) {
         // Element fits entirely
         currentPage.push(currentElement.cloneNode(true) as Element)
-        currentPageHeight += position.height
+        currentPageHeight += elementHeight
         remainingElements.shift() // Remove processed element
       } else {
+        // Calculate where in the editor the page break occurs
+        const breakPosition =
+          pageHeight -
+          currentPageHeight +
+          (currentElement.getBoundingClientRect().top - editorRect.top)
+        console.log('Break position calculated:', breakPosition)
+
         // Element causes overflow - try to split
         if (currentElement.tagName === 'TABLE') {
-          const { before, after } = this.splitTable(currentElement, pageHeight)
+          const { before, after } = this.splitTable(currentElement, breakPosition)
 
           if (before) {
             currentPage.push(before)
@@ -144,7 +185,8 @@ export class PageBreakService {
             remainingElements.unshift(after) // Add split table remainder
           }
         } else if (currentElement.tagName === 'UL' || currentElement.tagName === 'OL') {
-          const { before, after } = this.splitList(currentElement, pageHeight)
+          // Use the same breakPosition calculation as tables
+          const { before, after } = this.splitList(currentElement, breakPosition)
 
           if (before) {
             currentPage.push(before)
