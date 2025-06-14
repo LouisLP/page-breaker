@@ -99,25 +99,26 @@ export class PageBreakService {
     return { before: beforeList, after: afterList }
   }
 
-  /**
-   * Split a text element by position (simple approach)
-   */
-  private splitTextElement(element: Element, breakPosition: number): SplitResult {
-    // For simplicity, just move the entire element to one side or the other
-    // In a production app, you'd implement word-by-word splitting
-    const position = DOMUtils.getElementPosition(element, this.referenceElement)
+  // TODO: better text implementation
+  // /**
+  //  * Split a text element by position (simple approach)
+  //  */
+  // private splitTextElement(element: Element, breakPosition: number): SplitResult {
+  //   // For simplicity, just move the entire element to one side or the other
+  //   // In a production app, you'd implement word-by-word splitting
+  //   const position = DOMUtils.getElementPosition(element, this.referenceElement)
 
-    if (position.top >= breakPosition) {
-      // Element is entirely after break point
-      return { before: null, after: element.cloneNode(true) as Element }
-    } else if (position.bottom <= breakPosition) {
-      // Element is entirely before break point
-      return { before: element.cloneNode(true) as Element, after: null }
-    } else {
-      // Element crosses break point - simplified handling
-      return { before: element.cloneNode(true) as Element, after: null }
-    }
-  }
+  //   if (position.top >= breakPosition) {
+  //     // Element is entirely after break point
+  //     return { before: null, after: element.cloneNode(true) as Element }
+  //   } else if (position.bottom <= breakPosition) {
+  //     // Element is entirely before break point
+  //     return { before: element.cloneNode(true) as Element, after: null }
+  //   } else {
+  //     // Element crosses break point - simplified handling
+  //     return { before: element.cloneNode(true) as Element, after: null }
+  //   }
+  // }
 
   /**
    * Process elements and create pages
@@ -217,7 +218,7 @@ export class PageBreakService {
           currentPage = []
           currentPageHeight = 0
 
-          // Don't remove the element, it will be processed in the next iteration
+          // Don't remove the element (processed in the next iteration)
         }
       }
 
