@@ -7,34 +7,39 @@ const pageHeight = ref<number>(1000)
 const editorRef = ref<HTMLElement | null>(null)
 const pages = ref<string[]>([])
 const editorContent = ref<string>(`
-<div><img src="https://placehold.co/700x300" alt="Placeholder image 1" /></div>
-<div><br /></div>
-<div><b>This is the heading</b></div>
-<div>
-  <b><br /></b>
-</div>
-<div>
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-  dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-  amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-  invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-  justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-  dolor sit amet.
-</div>
-<div><br /></div>
-<div>
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-  dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-  amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-  invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-  justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-  dolor sit amet.
-</div>
-<div><br /></div>
-<div><br /></div>
-<div>
+  <img src="https://placehold.co/700x300" alt="Placeholder image 1" />
+
+  <br />
+
+  <h2><b>This is the heading</b></h2>
+
+  <br />
+
+  <p>
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+    amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+    justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+    dolor sit amet.
+  </p>
+
+  <br />
+
+  <p>
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+    amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+    justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+    dolor sit amet.
+  </p>
+
+  <br />
+  <br />
+
   <table border="1" style="width: 100%; margin: 10px 0">
     <tbody>
       <tr>
@@ -55,37 +60,43 @@ const editorContent = ref<string>(`
       </tr>
     </tbody>
   </table>
-</div>
-<div><br /></div>
-<div>
-  <div>
+
+  <br />
+
+  <p>
     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
     ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
     dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
     sit amet.
-  </div>
+  </p>
+
   <br />
-</div>
-<div>
+
   <ul>
     <li>List item</li>
-    <li>another</li>
-    <li>item</li>
-    <li>item</li>
+    <li>Another</li>
+    <li>Item</li>
+    <li>Item</li>
   </ul>
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-  dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-  amet.
-</div>
-<div><br /></div>
-<div>
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-  dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-  amet.
-</div>
-<div><img src="https://placehold.co/700x600" alt="Placeholder image 1" /></div>
+
+  <p>
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+    amet.
+  </p>
+
+  <br />
+
+  <p>
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+    amet.
+  </p>
+
+  <img src="https://placehold.co/700x600" alt="Placeholder image 2" />
+
 `)
 
 // Editor actions
