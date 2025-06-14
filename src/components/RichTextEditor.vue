@@ -16,7 +16,7 @@ const editorContent = ref<string>(`
   <br />
 
   <p>
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+    Break at <b>1200</b> for a list, or <b>820</b> for a table/image overflow. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
     ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
     dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
     amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
@@ -69,18 +69,11 @@ const editorContent = ref<string>(`
     sit amet.
   </p>
 
-  <ol>
-    <li>Ordered list item 1</li>
-    <li>Ordered list item 2</li>
-    <li>Ordered list item 3</li>
-    <li>Ordered list item 4</li>
-  </ol>
-
   <ul>
-    <li>Unordered list item 1</li>
-    <li>Unordered list item 2</li>
-    <li>Unordered list item 3</li>
-    <li>Unordered list item 4</li>
+    <li>List item 1</li>
+    <li>List item 2</li>
+    <li>List item 3</li>
+    <li>List item 4</li>
   </ul>
 
   <p>
@@ -90,7 +83,12 @@ const editorContent = ref<string>(`
     amet.
   </p>
 
-  <br />
+  <ul>
+    <li>List item 1</li>
+    <li>List item 2</li>
+    <li>List item 3</li>
+    <li>List item 4</li>
+  </ul>
 
   <p>
     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
@@ -264,7 +262,7 @@ const setPageBreak = (): void => {
         v-for="(page, index) in pages"
         :key="index"
         class="page border border-gray-300 p-5 mb-4 bg-white shadow-sm"
-        :style="{ height: pageHeight + 80 + 'px', overflow: 'hidden' }"
+        :style="{ height: pageHeight + 120 + 'px', overflow: 'hidden' }"
       >
         <div class="text-xs text-gray-500 mb-2">Page {{ index + 1 }}</div>
         <div v-html="page" class="page-content mb-24"></div>
