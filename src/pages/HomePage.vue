@@ -15,15 +15,27 @@ import RichTextEditor from '../components/RichTextEditor.vue'
           class="size-4 animate-pulse mt-1"
         />
       </div>
-      <!-- Right-side link -->
-      <a
-        href="https://app.avayl.tech/coding_task.html"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-base font-medium text-blue-600 hover:underline"
-      >
-        Reference
-      </a>
+      <!-- Right-side links -->
+      <div class="gap-8 flex items-center">
+        <!-- Original HTML Reference -->
+        <a
+          href="https://app.avayl.tech/coding_task.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-base font-medium text-blue-600 hover:underline"
+        >
+          Original HTML
+        </a>
+        <!-- GitHub Repo -->
+        <a
+          href="https://github.com/LouisLP/page-breaker"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-base font-medium text-blue-600 hover:underline"
+        >
+          GitHub Repo
+        </a>
+      </div>
     </nav>
 
     <!-- Editor -->
