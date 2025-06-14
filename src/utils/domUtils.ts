@@ -3,59 +3,82 @@
  */
 export class DOMUtils {
   /**
-   * Create a temporary container to accurately measure element heights
+   * Get element position information relative to a container
    */
-  static createMeasurementContainer(referenceElement: HTMLElement): HTMLElement {
-    const container = document.createElement('div')
-    const editorStyles = window.getComputedStyle(referenceElement)
+  static getElementPosition(
+    element: Element,
+    container: Element,
+  ): { top: number; bottom: number; height: number } {
+    const containerRect = container.getBoundingClientRect()
+    const elementRect = element.getBoundingClientRect()
 
-    container.style.position = 'absolute'
-    container.style.visibility = 'hidden'
-    container.style.top = '-9999px'
-    container.style.left = '-9999px'
-    container.style.width = editorStyles.width
-    container.style.padding = editorStyles.padding
-    container.style.margin = editorStyles.margin
-    container.style.fontFamily = editorStyles.fontFamily
-    container.style.fontSize = editorStyles.fontSize
-    container.style.lineHeight = editorStyles.lineHeight
-
-    document.body.appendChild(container)
-    return container
+    return {
+      top: elementRect.top - containerRect.top,
+      bottom: elementRect.bottom - containerRect.top,
+      height: elementRect.height,
+    }
   }
 
   /**
-   * Measure the height of elements in a temporary container
-   */
-  static measureElementsHeight(elements: Element[], referenceElement: HTMLElement): number {
-    const container = this.createMeasurementContainer(referenceElement)
-
-    elements.forEach((el) => {
-      container.appendChild(el.cloneNode(true))
-    })
-
-    const height = container.offsetHeight
-    document.body.removeChild(container)
-    return height
-  }
-
-  /**
-   * Clone a table structure without content
+   * Clone a table structure properly preserving all attributes
    */
   static cloneTableStructure(table: Element): Element {
-    const clonedTable = table.cloneNode(false) as Element
-    const tbody = clonedTable.querySelector('tbody') || document.createElement('tbody')
-    if (!clonedTable.querySelector('tbody')) {
-      clonedTable.appendChild(tbody)
+    // Create a fresh table element
+    const clonedTable = document.createElement('table')
+
+    // Copy all attributes from original table
+    Array.from(table.attributes).forEach((attr) => {
+      clonedTable.setAttribute(attr.name, attr.value)
+    })
+
+    // Find and clone the tbody
+    const originalTbody = table.querySelector('tbody')
+    if (originalTbody) {
+      const clonedTbody = document.createElement('tbody')
+      // Copy tbody attributes if any
+      Array.from(originalTbody.attributes).forEach((attr) => {
+        clonedTbody.setAttribute(attr.name, attr.value)
+      })
+      clonedTable.appendChild(clonedTbody)
+    } else {
+      // Create tbody if it doesn't exist
+      clonedTable.appendChild(document.createElement('tbody'))
     }
+
     return clonedTable
   }
 
   /**
-   * Add rows to a table's tbody
+   * Create a table with specific rows
    */
-  static addRowsToTable(table: Element, rows: Element[]): void {
-    const tbody = table.querySelector('tbody')!
-    rows.forEach((row) => tbody.appendChild(row.cloneNode(true)))
+  static createTableWithRows(originalTable: Element, rows: Element[]): Element {
+    const newTable = this.cloneTableStructure(originalTable)
+    const tbody = newTable.querySelector('tbody')!
+
+    rows.forEach((row) => {
+      const clonedRow = row.cloneNode(true) as Element
+      tbody.appendChild(clonedRow)
+    })
+
+    return newTable
+  }
+
+  /**
+   * Clone a list structure
+   */
+  static createListWithItems(originalList: Element, items: Element[]): Element {
+    const newList = document.createElement(originalList.tagName)
+
+    // Copy all attributes
+    Array.from(originalList.attributes).forEach((attr) => {
+      newList.setAttribute(attr.name, attr.value)
+    })
+
+    // Add items
+    items.forEach((item) => {
+      newList.appendChild(item.cloneNode(true))
+    })
+
+    return newList
   }
 }

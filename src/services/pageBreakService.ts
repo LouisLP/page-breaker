@@ -1,4 +1,4 @@
-import type { SplitResult, PageResult } from '@/types/editor'
+import type { SplitResult } from '@/types/editor'
 import { DOMUtils } from '@/utils/domUtils'
 
 /**
@@ -12,25 +12,22 @@ export class PageBreakService {
   }
 
   /**
-   * Split a table by rows based on available height
+   * Split a table by rows based on page break position
    */
-  private splitTable(table: Element, availableHeight: number): SplitResult {
+  private splitTable(table: Element, breakPosition: number): SplitResult {
     const rows = Array.from(table.querySelectorAll('tr'))
     const beforeRows: Element[] = []
-    let afterRows: Element[] = []
+    const afterRows: Element[] = []
 
-    for (let i = 0; i < rows.length; i++) {
-      const testRows = [...beforeRows, rows[i]]
-      const testTable = DOMUtils.cloneTableStructure(table)
-      DOMUtils.addRowsToTable(testTable, testRows)
+    for (const row of rows) {
+      const position = DOMUtils.getElementPosition(row, this.referenceElement)
 
-      const testHeight = DOMUtils.measureElementsHeight([testTable], this.referenceElement)
-
-      if (testHeight <= availableHeight) {
-        beforeRows.push(rows[i])
+      if (position.bottom <= breakPosition) {
+        // Row fits completely before the break
+        beforeRows.push(row)
       } else {
-        afterRows = rows.slice(i)
-        break
+        // Row goes after the break
+        afterRows.push(row)
       }
     }
 
@@ -38,38 +35,33 @@ export class PageBreakService {
     let afterTable: Element | null = null
 
     if (beforeRows.length > 0) {
-      beforeTable = DOMUtils.cloneTableStructure(table)
-      DOMUtils.addRowsToTable(beforeTable, beforeRows)
+      beforeTable = DOMUtils.createTableWithRows(table, beforeRows)
     }
 
     if (afterRows.length > 0) {
-      afterTable = DOMUtils.cloneTableStructure(table)
-      DOMUtils.addRowsToTable(afterTable, afterRows)
+      afterTable = DOMUtils.createTableWithRows(table, afterRows)
     }
 
     return { before: beforeTable, after: afterTable }
   }
 
   /**
-   * Split a list by items based on available height
+   * Split a list by items based on page break position
    */
-  private splitList(list: Element, availableHeight: number): SplitResult {
+  private splitList(list: Element, breakPosition: number): SplitResult {
     const items = Array.from(list.children)
     const beforeItems: Element[] = []
-    let afterItems: Element[] = []
+    const afterItems: Element[] = []
 
-    for (let i = 0; i < items.length; i++) {
-      const testItems = [...beforeItems, items[i]]
-      const testList = list.cloneNode(false) as Element
-      testItems.forEach((item) => testList.appendChild(item.cloneNode(true)))
+    for (const item of items) {
+      const position = DOMUtils.getElementPosition(item, this.referenceElement)
 
-      const testHeight = DOMUtils.measureElementsHeight([testList], this.referenceElement)
-
-      if (testHeight <= availableHeight) {
-        beforeItems.push(items[i])
+      if (position.bottom <= breakPosition) {
+        // Item fits completely before the break
+        beforeItems.push(item)
       } else {
-        afterItems = items.slice(i)
-        break
+        // Item goes after the break
+        afterItems.push(item)
       }
     }
 
@@ -77,128 +69,34 @@ export class PageBreakService {
     let afterList: Element | null = null
 
     if (beforeItems.length > 0) {
-      beforeList = list.cloneNode(false) as Element
-      beforeItems.forEach((item) => beforeList!.appendChild(item.cloneNode(true)))
+      beforeList = DOMUtils.createListWithItems(list, beforeItems)
     }
 
     if (afterItems.length > 0) {
-      afterList = list.cloneNode(false) as Element
-      afterItems.forEach((item) => afterList!.appendChild(item.cloneNode(true)))
+      afterList = DOMUtils.createListWithItems(list, afterItems)
     }
 
     return { before: beforeList, after: afterList }
   }
 
   /**
-   * Split a text element by words based on available height
+   * Split a text element by position (simple approach)
    */
-  private splitTextElement(element: Element, availableHeight: number): SplitResult {
-    const text = element.textContent || ''
-    const words = text.split(' ')
+  private splitTextElement(element: Element, breakPosition: number): SplitResult {
+    // For simplicity, just move the entire element to one side or the other
+    // In a production app, you'd implement word-by-word splitting
+    const position = DOMUtils.getElementPosition(element, this.referenceElement)
 
-    const beforeWords: string[] = []
-    let afterWords: string[] = []
-
-    for (let i = 0; i < words.length; i++) {
-      const testWords = [...beforeWords, words[i]]
-      const testElement = element.cloneNode(false) as Element
-      testElement.textContent = testWords.join(' ')
-
-      const testHeight = DOMUtils.measureElementsHeight([testElement], this.referenceElement)
-
-      if (testHeight <= availableHeight) {
-        beforeWords.push(words[i])
-      } else {
-        afterWords = words.slice(i)
-        break
-      }
+    if (position.top >= breakPosition) {
+      // Element is entirely after break point
+      return { before: null, after: element.cloneNode(true) as Element }
+    } else if (position.bottom <= breakPosition) {
+      // Element is entirely before break point
+      return { before: element.cloneNode(true) as Element, after: null }
+    } else {
+      // Element crosses break point - simplified handling
+      return { before: element.cloneNode(true) as Element, after: null }
     }
-
-    let beforeElement: Element | null = null
-    let afterElement: Element | null = null
-
-    if (beforeWords.length > 0) {
-      beforeElement = element.cloneNode(false) as Element
-      beforeElement.textContent = beforeWords.join(' ')
-    }
-
-    if (afterWords.length > 0) {
-      afterElement = element.cloneNode(false) as Element
-      afterElement.textContent = afterWords.join(' ')
-    }
-
-    return { before: beforeElement, after: afterElement }
-  }
-
-  /**
-   * Create a single page from elements array
-   */
-  private createSinglePage(elements: Element[], pageHeight: number): PageResult {
-    const pageElements: Element[] = []
-    let overflow: Element[] = []
-
-    for (let i = 0; i < elements.length; i++) {
-      const currentElement = elements[i]
-      const testElements = [...pageElements, currentElement]
-      const testHeight = DOMUtils.measureElementsHeight(testElements, this.referenceElement)
-
-      if (testHeight <= pageHeight) {
-        // Element fits completely
-        pageElements.push(currentElement.cloneNode(true) as Element)
-      } else {
-        // Element causes overflow
-        const availableHeight =
-          pageHeight - DOMUtils.measureElementsHeight(pageElements, this.referenceElement)
-
-        // Try to split the element
-        if (currentElement.tagName === 'TABLE') {
-          const { before, after } = this.splitTable(currentElement, availableHeight)
-
-          if (before) {
-            pageElements.push(before)
-          }
-
-          if (after) {
-            overflow = [after, ...elements.slice(i + 1)]
-          } else {
-            overflow = elements.slice(i + 1)
-          }
-          break
-        } else if (currentElement.tagName === 'UL' || currentElement.tagName === 'OL') {
-          const { before, after } = this.splitList(currentElement, availableHeight)
-
-          if (before) {
-            pageElements.push(before)
-          }
-
-          if (after) {
-            overflow = [after, ...elements.slice(i + 1)]
-          } else {
-            overflow = elements.slice(i + 1)
-          }
-          break
-        } else if (currentElement.tagName === 'DIV' && currentElement.textContent?.trim()) {
-          const { before, after } = this.splitTextElement(currentElement, availableHeight)
-
-          if (before) {
-            pageElements.push(before)
-          }
-
-          if (after) {
-            overflow = [after, ...elements.slice(i + 1)]
-          } else {
-            overflow = elements.slice(i + 1)
-          }
-          break
-        } else {
-          // Non-splittable element (like images) - move to next page
-          overflow = elements.slice(i)
-          break
-        }
-      }
-    }
-
-    return { pageElements, overflow }
   }
 
   /**
@@ -208,23 +106,84 @@ export class PageBreakService {
     if (elements.length === 0) return []
 
     const pages: string[] = []
-    let remainingElements = [...elements]
+    let currentPage: Element[] = []
+    let currentPageHeight = 0
+    const remainingElements = [...elements]
 
     while (remainingElements.length > 0) {
-      const { pageElements, overflow } = this.createSinglePage(remainingElements, pageHeight)
+      const currentElement = remainingElements[0]
+      const position = DOMUtils.getElementPosition(currentElement, this.referenceElement)
 
-      if (pageElements.length > 0) {
-        const pageDiv = document.createElement('div')
-        pageElements.forEach((el) => pageDiv.appendChild(el.cloneNode(true)))
-        pages.push(pageDiv.innerHTML)
+      // Check if element fits on current page
+      if (currentPageHeight === 0 || currentPageHeight + position.height <= pageHeight) {
+        // Element fits entirely
+        currentPage.push(currentElement.cloneNode(true) as Element)
+        currentPageHeight += position.height
+        remainingElements.shift() // Remove processed element
+      } else {
+        // Element causes overflow - try to split
+        if (currentElement.tagName === 'TABLE') {
+          const { before, after } = this.splitTable(currentElement, pageHeight)
+
+          if (before) {
+            currentPage.push(before)
+          }
+
+          // Create current page
+          const pageDiv = document.createElement('div')
+          currentPage.forEach((el) => pageDiv.appendChild(el))
+          pages.push(pageDiv.innerHTML)
+
+          // Reset for next page
+          currentPage = []
+          currentPageHeight = 0
+
+          // Update remaining elements
+          remainingElements.shift() // Remove the table
+          if (after) {
+            remainingElements.unshift(after) // Add split table remainder
+          }
+        } else if (currentElement.tagName === 'UL' || currentElement.tagName === 'OL') {
+          const { before, after } = this.splitList(currentElement, pageHeight)
+
+          if (before) {
+            currentPage.push(before)
+          }
+
+          // Create current page
+          const pageDiv = document.createElement('div')
+          currentPage.forEach((el) => pageDiv.appendChild(el))
+          pages.push(pageDiv.innerHTML)
+
+          // Reset for next page
+          currentPage = []
+          currentPageHeight = 0
+
+          // Update remaining elements
+          remainingElements.shift() // Remove the list
+          if (after) {
+            remainingElements.unshift(after) // Add split list remainder
+          }
+        } else {
+          // For other elements (images, text, etc.), move to next page
+          // Create current page
+          const pageDiv = document.createElement('div')
+          currentPage.forEach((el) => pageDiv.appendChild(el))
+          pages.push(pageDiv.innerHTML)
+
+          // Reset for next page
+          currentPage = []
+          currentPageHeight = 0
+
+          // Don't remove the element, it will be processed in the next iteration
+        }
       }
 
-      remainingElements = overflow
-
-      // Prevent infinite loop
-      if (pageElements.length === 0 && overflow.length > 0) {
-        console.warn('Unable to fit element on page, skipping...')
-        remainingElements = remainingElements.slice(1)
+      // Check if we need to finalize the last page
+      if (remainingElements.length === 0 && currentPage.length > 0) {
+        const pageDiv = document.createElement('div')
+        currentPage.forEach((el) => pageDiv.appendChild(el))
+        pages.push(pageDiv.innerHTML)
       }
     }
 
