@@ -186,7 +186,7 @@ export class PageBreakService {
             remainingElements.unshift(after) // Add split table remainder
           }
         } else if (currentElement.tagName === 'UL' || currentElement.tagName === 'OL') {
-          // Use the same breakPosition calculation as tables
+          // Similar calc as tables
           const { before, after } = this.splitList(currentElement, breakPosition)
 
           if (before) {
@@ -208,8 +208,7 @@ export class PageBreakService {
             remainingElements.unshift(after) // Add split list remainder
           }
         } else {
-          // For other elements (images, text, etc.), move to next page
-          // Create current page
+          // All other elements just get fully moved to the next page
           const pageDiv = document.createElement('div')
           currentPage.forEach((el) => pageDiv.appendChild(el))
           pages.push(pageDiv.innerHTML)
