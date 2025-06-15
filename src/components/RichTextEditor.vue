@@ -142,17 +142,17 @@ const setPageBreak = (): void => {
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto my-5" id="rich-text-editor">
+  <div class="mx-auto my-5 max-w-4xl" id="rich-text-editor">
     <!-- Toolbar (buttons) -->
     <div
       id="toolbar"
-      class="bg-gray-100 p-2.5 border border-gray-300 flex items-center flex-wrap gap-1"
+      class="flex flex-wrap items-center gap-1 border border-gray-300 bg-gray-100 p-2.5"
     >
       <!-- Format Bold -->
       <button
         @click="formatText('bold')"
         title="Bold"
-        class="mx-1 px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+        class="mx-1 cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
       >
         <b>B</b>
       </button>
@@ -161,7 +161,7 @@ const setPageBreak = (): void => {
       <button
         @click="formatText('italic')"
         title="Italic"
-        class="mx-1 px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+        class="mx-1 cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
       >
         <i>I</i>
       </button>
@@ -170,7 +170,7 @@ const setPageBreak = (): void => {
       <button
         @click="formatText('underline')"
         title="Underline"
-        class="mx-1 px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+        class="mx-1 cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
       >
         <u>U</u>
       </button>
@@ -179,7 +179,7 @@ const setPageBreak = (): void => {
       <button
         @click="insertTable"
         title="Insert Table"
-        class="mx-1 px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+        class="mx-1 cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
       >
         Table
       </button>
@@ -188,7 +188,7 @@ const setPageBreak = (): void => {
       <button
         @click="insertList('ul')"
         title="Bullet List"
-        class="mx-1 px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+        class="mx-1 cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
       >
         •
       </button>
@@ -197,7 +197,7 @@ const setPageBreak = (): void => {
       <button
         @click="insertList('ol')"
         title="Numbered List"
-        class="mx-1 px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+        class="mx-1 cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
       >
         1.
       </button>
@@ -206,7 +206,7 @@ const setPageBreak = (): void => {
       <button
         @click="insertImage"
         title="Insert Image"
-        class="mx-1 px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+        class="mx-1 cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
       >
         🖼️
       </button>
@@ -219,12 +219,12 @@ const setPageBreak = (): void => {
           type="number"
           min="100"
           max="4000"
-          class="w-16 p-1 border border-gray-300 bg-white rounded"
+          class="w-16 rounded border border-gray-300 bg-white p-1"
         />
         <button
           @click="setPageBreak"
           title="Set Page Break Height"
-          class="px-2.5 py-1 cursor-pointer border border-gray-300 bg-white rounded transition-colors hover:bg-gray-100 active:bg-blue-100"
+          class="cursor-pointer rounded border border-gray-300 bg-white px-2.5 py-1 transition-colors hover:bg-gray-100 active:bg-blue-100"
         >
           Set
         </button>
@@ -237,7 +237,7 @@ const setPageBreak = (): void => {
       <div
         ref="editorRef"
         id="editor"
-        class="editor border border-gray-300 min-h-72 p-5 mt-0 outline-none leading-6 focus:border-blue-500 focus:shadow-sm"
+        class="editor mt-0 min-h-72 border border-gray-300 p-5 leading-6 outline-none focus:border-blue-500 focus:shadow-sm"
         contenteditable="true"
         @focus="handleEditorFocus"
         v-html="editorContent"
@@ -252,7 +252,7 @@ const setPageBreak = (): void => {
         </span>
         <button
           @click="pages = []"
-          class="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600"
+          class="rounded bg-gray-500 px-3 py-1 text-sm text-white hover:bg-gray-600"
         >
           Back to Editor
         </button>
@@ -261,10 +261,10 @@ const setPageBreak = (): void => {
       <div
         v-for="(page, index) in pages"
         :key="index"
-        class="page border border-gray-300 p-5 mb-4 bg-white shadow-sm"
+        class="page mb-4 border border-gray-300 bg-white p-5 shadow-sm"
         :style="{ height: pageHeight + 120 + 'px', overflow: 'hidden' }"
       >
-        <div class="text-xs text-gray-500 mb-2">Page {{ index + 1 }}</div>
+        <div class="mb-2 text-xs text-gray-500">Page {{ index + 1 }}</div>
         <div v-html="page" class="page-content mb-24"></div>
       </div>
     </div>

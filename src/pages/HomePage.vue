@@ -5,18 +5,18 @@ import RichTextEditor from '../components/RichTextEditor.vue'
 <template>
   <main id="homepage">
     <!-- Navbar -->
-    <nav class="flex justify-between items-center px-6 py-4 bg-slate-50 shadow-md mb-8">
+    <nav class="mb-8 flex items-center justify-between bg-slate-50 px-6 py-4 shadow-md">
       <!-- Logo -->
-      <div class="flex items-center gap-2 font-bold tracking-wide text-xl">
+      <div class="flex items-center gap-2 text-xl font-bold tracking-wide">
         <span>Page Breaker</span>
         <img
           src="/favicon_io/apple-touch-icon.png"
           alt="Broken heart logo"
-          class="size-4 animate-pulse mt-1"
+          class="mt-1 size-4 animate-pulse"
         />
       </div>
       <!-- Right-side links -->
-      <div class="gap-8 flex items-center">
+      <div class="flex items-center gap-8">
         <!-- Original HTML Reference -->
         <a
           href="https://app.avayl.tech/coding_task.html"
